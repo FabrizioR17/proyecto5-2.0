@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .pagination import Pagination_payments
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated , IsAdminUser , AllowAny
 # Create your views here.
 
 class Rest_Payment(viewsets.ModelViewSet):
@@ -60,12 +61,12 @@ class Rest_Payment(viewsets.ModelViewSet):
 class Rest_Expired_payments(viewsets.ModelViewSet):
   queryset = Expired_payments.objects.all()
   serializer_class = Expired_paymentsSerializer
-  #throttle_scope = 'exp_app'
+  pagination_class = Pagination_payments
+  throttle_scope = 'exp_app'
 
-  # def get_permissions(self):
-  #   if self.request.method == 'GET':
-  #     return [IsAuthenticated()]
-  #   elif self.request.method == 'POST':
-  #     return [IsAuthenticated()]
-
-  #   return [IsAdminUser()]
+  def get_permissions(self):
+    if self.request.method == 'GET':
+      return [IsAdminUser()]
+    elif self.request.method == 'POST':
+      return [AllowAny()]
+    return [IsAdminUser()]
