@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path , re_path
+from django.urls import path , re_path , include
 
 from pagos.views import Rest_Expired_payments , Rest_Payment
 from servicios.views import Rest_services
@@ -47,6 +47,7 @@ router.register(r'expired-payments', Rest_Expired_payments , 'expired-payments')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('usuarios.urls')),
     path('users/create',  UserCreateView.as_view() , name='users-create'),
     path('users/list',  UserListView.as_view() , name='users-list'),
 
